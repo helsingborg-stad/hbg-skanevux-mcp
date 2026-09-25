@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     mcp_path: str = "/mcp"
+    allowed_hosts: str = "localhost:*,127.0.0.1:*"
+    allowed_origins: str = "http://localhost:*,http://127.0.0.1:*"
 
     api_key: str = Field(default="", validate_default=True)
 
@@ -198,7 +200,11 @@ app = mcp.streamable_http_app(
     streamable_http_path=settings.mcp_path,
     stateless_http=True,
     json_response=True,
-    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+    transport_security=TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=settings.allowed_hosts.split(","),
+        allowed_origins=settings.allowed_origins.split(","),
+    ),
 )
 
 _mcp_lifespan = app.router.lifespan_context
