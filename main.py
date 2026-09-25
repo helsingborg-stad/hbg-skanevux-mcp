@@ -52,7 +52,23 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-mcp = MCPServer("Skanevux MCP")
+mcp = MCPServer(
+    "Skanevux MCP",
+    instructions=(
+        "Use the skanevux tools when the user asks about salary, job chances "
+        "or job prospects for an occupation or course.\n"
+        "1. search_jobs with a short Swedish occupation stem "
+        '(e.g. "underskötersk", "elektriker"). '
+        "Titles are plural occupation-group names.\n"
+        "2. If there are no relevant hits: list_job_categories → pick the best "
+        "category → list_jobs(category_id) → pick the matching job(s).\n"
+        "3. get_job_details(slug) for the chosen job(s). Summarize salary "
+        "(Lönenivå), job chances and the Arbetsförmedlingen forecast, and "
+        "include the page URL as the source.\n"
+        "4. If nothing fits, say so and link to https://skanevux.se/yrken/\n"
+        "Data covers vocational occupations; forecasts are for Skåne län."
+    ),
+)
 
 http_client = httpx.AsyncClient(
     base_url=BASE_URL,
